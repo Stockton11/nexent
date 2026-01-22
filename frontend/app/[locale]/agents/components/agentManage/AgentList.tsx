@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, Col, Flex, Tooltip, Divider, Table, theme, App } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
@@ -39,6 +39,7 @@ export default function AgentList({
   const { message } = App.useApp();
   const confirm = useConfirmModal();
   const queryClient = useQueryClient();
+
 
   // Call relationship modal state
   const [callRelationshipModalVisible, setCallRelationshipModalVisible] =
@@ -279,6 +280,8 @@ export default function AgentList({
               onClick: (e: any) => {
                 e.preventDefault();
                 e.stopPropagation();
+
+                // Call onSelectAgent
                 onSelectAgent(agent);
               },
             })}
@@ -292,6 +295,7 @@ export default function AgentList({
                   const isSelected =
                     currentAgentId !== null &&
                     String(currentAgentId) === String(agent.id);
+                  const isNew = agent.is_new || false;
 
                   return (
                     <Flex
@@ -330,6 +334,13 @@ export default function AgentList({
                               })()}
                             >
                               <ExclamationCircleOutlined className="text-amber-500 text-sm flex-shrink-0 cursor-pointer" />
+                            </Tooltip>
+                          )}
+                          {isNew && (
+                            <Tooltip title={t("space.new", "New imported agent")}>
+                              <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 flex-shrink-0">
+                                NEW
+                              </span>
                             </Tooltip>
                           )}
                           {displayName && (

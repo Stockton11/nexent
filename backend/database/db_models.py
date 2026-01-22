@@ -1,4 +1,4 @@
-from sqlalchemy import BigInteger, Boolean, Column, Integer, JSON, Numeric, Sequence, String, Text, TIMESTAMP
+from sqlalchemy import Boolean, Column, Integer, JSON, Numeric, Sequence, String, Text, TIMESTAMP
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.sql import func
 
@@ -222,6 +222,7 @@ class AgentInfo(TableBase):
     business_logic_model_name = Column(String(100), doc="Model name used for business logic prompt generation")
     business_logic_model_id = Column(Integer, doc="Model ID used for business logic prompt generation, foreign key reference to model_record_t.model_id")
     group_ids = Column(String, doc="Agent group IDs list")
+    is_new = Column(Boolean, default=False, doc="Whether this agent is marked as new for the user")
 
 
 class ToolInstance(TableBase):
@@ -248,7 +249,7 @@ class KnowledgeRecord(TableBase):
     __tablename__ = "knowledge_record_t"
     __table_args__ = {"schema": "nexent"}
 
-    knowledge_id = Column(BigInteger, Sequence("knowledge_record_t_knowledge_id_seq", schema="nexent"),
+    knowledge_id = Column(Integer, Sequence("knowledge_record_t_knowledge_id_seq", schema="nexent"),
                           primary_key=True, nullable=False, doc="Knowledge base ID, unique primary key")
     index_name = Column(String(100), doc="Internal Elasticsearch index name")
     knowledge_name = Column(String(100), doc="User-facing knowledge base name")
